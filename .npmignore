@@ -1,0 +1,12 @@
+/.env*
+/.github
+/src
+/roolup.config.js
+/.prettierrc.json
+/scripts
+/.vscode
+/.husky
+/jest.config.js
+/.eslintrc
+/tsconfig.json
+/test
