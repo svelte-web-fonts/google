@@ -1,7 +1,7 @@
 {
     "name": "@svelte-web-fonts/google",
     "description": "Load fonts via google with typescript auto-completion",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "license": "MIT",
     "svelte": "dist/index.js",
     "module": "dist/index.mjs",
@@ -12,13 +12,13 @@
         "name": "Jakob Kruse",
         "url": "https://github.com/jakob-kruse"
     },
-    "homepage": "https://github.com/SvelteWebFonts/google#readme",
+    "homepage": "https://github.com/svelte-web-fonts/google#readme",
     "repository": {
         "type": "git",
-        "url": "https://github.com/SvelteWebFonts/google"
+        "url": "https://github.com/svelte-web-fonts/google"
     },
     "bugs": {
-        "url": "https://github.com/SvelteWebFonts/google/issues",
+        "url": "https://github.com/svelte-web-fonts/google/issues",
         "email": "svelte-web-fonts-google@hostname.com"
     },
     "scripts": {
@@ -64,14 +64,12 @@
         "svelte-preprocess": "^4.5.1",
         "ts-node": "^10.2.0",
         "tslib": "^2.0.3",
-        "typescript": "^4.3.5"
+        "typescript": "^4.3.5",
+        "jest": "^27.0.6",
+        "ts-jest": "^27.0.4"
     },
     "keywords": [
         "svelte",
         "fonts"
-    ],
-    "dependencies": {
-        "jest": "^27.0.6",
-        "ts-jest": "^27.0.4"
-    }
+    ]
 }
