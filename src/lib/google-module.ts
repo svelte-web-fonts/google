@@ -55,9 +55,9 @@ export default class GoogleModule {
 
             const encodedKey = encodeURIComponent(key);
 
-            const delimiter = key === "effect" ? "|" : ",";
+            const separator = key === "effect" ? "|" : ",";
             const encodedValue = Array.isArray(value)
-                ? value.map(encodeURIComponent).join(delimiter)
+                ? value.map(encodeURIComponent).join(separator)
                 : encodeURIComponent(value);
 
             newUrl += `${prefix}${encodedKey}=${encodedValue}`;

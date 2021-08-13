@@ -1,11 +1,26 @@
 {
     "name": "@svelte-web-fonts/google",
+    "description": "Load fonts via google with typescript auto-completion",
     "version": "0.0.1",
     "license": "MIT",
     "svelte": "dist/index.js",
     "module": "dist/index.mjs",
     "main": "dist/index.umd.js",
     "types": "dist/ts/index.d.ts",
+    "author": {
+        "email": "contact@jakob-kruse.de",
+        "name": "Jakob Kruse",
+        "url": "https://github.com/jakob-kruse"
+    },
+    "homepage": "https://github.com/SvelteWebFonts/google#readme",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/SvelteWebFonts/google"
+    },
+    "bugs": {
+        "url": "https://github.com/SvelteWebFonts/google/issues",
+        "email": "svelte-web-fonts-google@hostname.com"
+    },
     "scripts": {
         "prebuild": "rm -rf ./dist",
         "build": "rollup -c",
@@ -13,7 +28,7 @@
         "format": "prettier --config .prettierrc.json src/**/*.{ts,svelte} --write && npm run lint:fix",
         "lint": "svelte-check --ignore dist && eslint . --ext .ts",
         "lint:fix": "eslint . --ext .ts --fix",
-        "prepublishOnly": "npm run build && npm run format",
+        "prepublishOnly": "npm run build && npm run format && npm run test",
         "generate": "ts-node -r dotenv/config src/generator/index.ts && npm run format",
         "prepare": "husky install",
         "test": "jest",
