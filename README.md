@@ -1,6 +1,11 @@
 # @svelte-web-fonts/google
 
-Easily include Google Fonts in your svelte project.
+<p align="center">
+    <img src="https://raw.githubusercontent.com/SvelteWebFonts/google/main/assets/Project-Logo.png" width="128"/>
+    <h1 align="center">Easily include Google Fonts in your svelte project.</h1>
+</p>
+
+![workflow](https://github.com/SvelteWebFonts/google/actions/workflows/node.js.yml/badge.svg)
 
 ## Installation
 
