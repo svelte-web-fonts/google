@@ -7,3 +7,5 @@ export type {
 } from "./types";
 
 export type { GoogleFontSettings } from "./google-module";
+
+export { default as default } from "./GoogleFont.svelte";
