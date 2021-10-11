@@ -25,70 +25,52 @@ Use the "GoogleFont" component to create a stylesheet to include Google Fonts.
 
 Note: Use `<svelte:head>` to add the stylesheet to the head of your HTML.
 
-### With Typescript (recommended)
+## Usage
 
 ```html
 <script lang="ts">
-    import GoogleFont from "@svelte-web-fonts/google";
-    import type { GoogleFontDefinition } from "@svelte-web-fonts/google";
+import GoogleFont, { getFontStyle } from "@svelte-web-fonts/google";
+import type { GoogleFontDefinition, GoogleFontVariant } from "@svelte-web-fonts/google";
 
-    const font: GoogleFontDefinition = {
+const fonts: GoogleFontDefinition[] = [
+    {
+        family: "Style Script",
+        variants: [
+            "200"
+        ],
+    },
+    {
         family: "Roboto",
-        variants: ["400"],
-    };
+        variants: [
+            "100",
+            "400italic"
+        ],
+    },
+];
 </script>
 
 <svelte:head>
-    <GoogleFont {font}></GoogleFont>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <GoogleFont fonts="{fonts}" display="swap" />
 </svelte:head>
+
+<!-- Used for illustration purposes -->
+
+<h1>
+    {#each fonts as font}
+        {#each font.variants as variant}
+            <p style={getFontStyle(font.family, variant)}>
+                {font.family}
+            </p>
+        {/each}
+    {/each}
+</h1>
 ```
 
-<summary>
-Without Typescript
+# Troubleshooting
 
-<details>
-
-```html
-<script>
-    import GoogleFont from "@svelte-web-fonts/google";
-
-    const font = {
-        family: "Roboto",
-        variants: ["400"],
-    };
-</script>
-
-<svelte:head>
-    <GoogleFont {font}></GoogleFont>
-</svelte:head>
-```
-
-</details>
-</sumamry>
-
-## Multiple fonts
-
-```html
-<script lang="ts">
-    import GoogleFont from "@svelte-web-fonts/google";
-    import type { GoogleFontDefinition } from "@svelte-web-fonts/google";
-
-    const fonts: GoogleFontDefinition[] = [
-        {
-            family: "Style Script",
-            variants: ["400"],
-        },
-        {
-            family: "Hahmlet",
-            variants: ["200", "300"],
-        },
-    ];
-</script>
-
-<svelte:head>
-    <GoogleFont {fonts}></GoogleFont>
-</svelte:head>
-```
+Make sure to check the network tab if a font is not loading. Most of the time you specified a font variant that is not available.
 
 ## Font Options
 

@@ -1,129 +1,100 @@
 import type {
-    GoogleFontDisplay,
     GoogleFontDefinition,
-    GoogleFontSubset,
+    GoogleFontDisplay,
     GoogleFontEffect,
-} from "./types";
+    GoogleFontSubset,
+    GoogleFontVariant,
+} from "./types/common";
 
 export interface GoogleFontSettings {
     display?: GoogleFontDisplay;
+    subsets?: GoogleFontSubset[];
+    effect?: GoogleFontEffect;
     text?: string;
-    subset?: GoogleFontSubset[] | GoogleFontSubset;
-    effect?: GoogleFontEffect[] | GoogleFontEffect;
 }
 
 export default class GoogleModule {
     static readonly baseUrl = `https://fonts.googleapis.com/css2`;
 
-    static buildFamilyQueryParam({
-        family,
-        variants,
-    }: GoogleFontDefinition): string {
-        if (!variants || variants.length === 0) {
-            throw new Error("Font variants are required");
-        }
+    private static isItalic(variant: GoogleFontVariant) {
+        return variant.includes("italic");
+    }
 
-        const familyQueryParam = family.replace(/ /g, "+");
-        const variantsParam = variants
-            .sort()
+    private static getFamilyDefinition(
+        definition: GoogleFontDefinition,
+    ): string {
+        const { family } = definition;
+
+        const weights = GoogleModule.getFamilyWeights(definition);
+
+        return `${family.replace(/ /g, "+")}:${weights}`;
+    }
+
+    private static getFamilyWeights(definition: GoogleFontDefinition): string {
+        const { variants } = definition;
+
+        const someItalic = variants.some(GoogleModule.isItalic);
+
+        const pattern = someItalic ? "ital,wght" : "wght";
+
+        const weights = variants
             .map((variant) => {
-                const isItalic = variant.endsWith("italic");
+                if (someItalic) {
+                    const italvalue = GoogleModule.isItalic(variant) ? 1 : 0;
+                    const weight = variant.replace("italic", "");
 
-                const italicPrefix = isItalic ? "1" : "0";
+                    return `${italvalue},${weight}`;
+                }
 
-                const variantWeight = isItalic ? variant.slice(0, -6) : variant;
-
-                return `${italicPrefix},${variantWeight}`;
+                return variant;
             })
-            .join(";");
+            .join(someItalic ? ";" : ",");
 
-        return `family=${familyQueryParam}:ital,wght@${variantsParam}`;
+        return `${pattern}@${weights}`;
     }
 
-    static applySettingsToUrl({
-        url,
-        settings,
-    }: {
-        url: string;
-        settings?: GoogleFontSettings;
-    }): string {
-        let newUrl = url;
-
-        Object.entries(settings).forEach(([key, value]) => {
-            const isFirstParam = !newUrl.includes("?");
-            const prefix = isFirstParam ? "?" : "&";
-
-            const encodedKey = encodeURIComponent(key);
-
-            const separator = key === "effect" ? "|" : ",";
-            const encodedValue = Array.isArray(value)
-                ? value.map(encodeURIComponent).join(separator)
-                : encodeURIComponent(value);
-
-            newUrl += `${prefix}${encodedKey}=${encodedValue}`;
-        });
-
-        return newUrl;
+    private static applyParamToUrl(url: string, param: string, value: string) {
+        return `${url}&${param}=${encodeURIComponent(value)}`;
     }
 
-    static getStylesheet({
-        font,
-        fonts,
-        settings = {},
-    }: {
-        font?: GoogleFontDefinition;
-        fonts?: GoogleFontDefinition[];
-        settings?: GoogleFontSettings;
-    }): string {
-        if (!font && !fonts) {
-            throw new Error("fonts or font is required");
+    static getStylesheet(
+        fonts: GoogleFontDefinition | GoogleFontDefinition[],
+        {
+            display = "auto",
+            subsets = [],
+            effect = "none",
+            text = "",
+        }: GoogleFontSettings = {},
+    ): string {
+        const _fonts = Array.isArray(fonts) ? fonts : [fonts];
+
+        const families = _fonts
+            .map(GoogleModule.getFamilyDefinition)
+            .map((family, index: number) => {
+                const prefix = index === 0 ? "?" : "&";
+                return `${prefix}family=${family}`;
+            })
+            .join("");
+
+        let url = `${GoogleModule.baseUrl}${families}`;
+
+        if (display !== "auto") {
+            url = GoogleModule.applyParamToUrl(url, "display", display);
         }
 
-        if (font && fonts) {
-            throw new Error("fonts and font are mutually exclusive");
+        if (subsets.length > 0) {
+            const subsetsString = subsets.join(",");
+            url = this.applyParamToUrl(url, "subset", subsetsString);
         }
 
-        if (fonts) {
-            if (!Array.isArray(fonts)) {
-                throw new Error("fonts must be an array");
-            }
-
-            return this.getMultipleStylesheet({
-                fonts,
-                settings,
-            });
+        if (text) {
+            url = this.applyParamToUrl(url, "text", text);
         }
 
-        return this.getSingleStyleSheet({ font, settings });
-    }
+        if (effect !== "none") {
+            url = this.applyParamToUrl(url, "effect", effect);
+        }
 
-    static getSingleStyleSheet({
-        font,
-        settings = {},
-    }: {
-        font: GoogleFontDefinition;
-        settings?: GoogleFontSettings;
-    }): string {
-        const familyQueryParam = this.buildFamilyQueryParam(font);
-
-        return this.applySettingsToUrl({
-            url: `${this.baseUrl}?${familyQueryParam}`,
-            settings,
-        });
-    }
-
-    static getMultipleStylesheet({
-        fonts,
-        settings = {},
-    }: {
-        fonts: GoogleFontDefinition[];
-        settings?: GoogleFontSettings;
-    }): string {
-        const familyQueryParams = fonts.map(this.buildFamilyQueryParam);
-
-        return this.applySettingsToUrl({
-            url: `${this.baseUrl}?${familyQueryParams.join("&")}`,
-            settings,
-        });
+        return url;
     }
 }

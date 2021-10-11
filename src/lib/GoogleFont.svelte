@@ -1,30 +1,28 @@
 <script lang="ts">
-import GoogleModule from "./google-module";
-
 import type {
     GoogleFontDefinition,
     GoogleFontDisplay,
     GoogleFontEffect,
     GoogleFontSubset,
-} from "./types";
+} from "./types/common";
+import GoogleModule from "./google-module";
 
-export let font: GoogleFontDefinition = undefined;
-export let fonts: GoogleFontDefinition[] = undefined;
-export let display: GoogleFontDisplay = undefined;
-export let subset: GoogleFontSubset | GoogleFontSubset[] = undefined;
-export let effect: GoogleFontEffect | GoogleFontEffect[] = undefined;
-export let text: string = undefined;
+export let font: GoogleFontDefinition = null;
+export let fonts: GoogleFontDefinition[] = null;
 
-$: styleSheetUrl = GoogleModule.getStylesheet({
-    font,
-    fonts,
-    settings: {
-        display,
-        text,
-        effect,
-        subset,
-    },
+export let display: GoogleFontDisplay = "auto";
+export let effect: GoogleFontEffect = "none";
+export let subsets: GoogleFontSubset[] = [];
+export let text: string = "";
+
+$: styleSheetUrl = GoogleModule.getStylesheet(font ?? fonts, {
+    display,
+    subsets,
+    effect,
+    text,
 });
 </script>
 
-<link rel="stylesheet" href="{styleSheetUrl}}" />
+<slot styleSheetUrl="{styleSheetUrl}">
+    <link rel="stylesheet" href="{styleSheetUrl}" />
+</slot>
