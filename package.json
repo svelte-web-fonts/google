@@ -1,7 +1,7 @@
 {
     "name": "@svelte-web-fonts/google",
     "description": "Load fonts via google with typescript auto-completion",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": "MIT",
     "svelte": "dist/index.js",
     "module": "dist/index.mjs",
