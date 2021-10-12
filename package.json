@@ -1,7 +1,7 @@
 {
     "name": "@svelte-web-fonts/google",
     "description": "Load fonts via google with typescript auto-completion",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "license": "MIT",
     "svelte": "dist/index.js",
     "module": "dist/index.mjs",
@@ -28,9 +28,8 @@
         "format": "prettier --config .prettierrc.json src/**/*.{ts,svelte} --write && npm run lint:fix",
         "lint": "svelte-check --ignore dist && eslint . --ext .ts",
         "lint:fix": "eslint . --ext .ts --fix",
-        "prepublishOnly": "npm run build && npm run format && npm run test",
         "generate": "ts-node -r dotenv/config src/generator/index.ts && npm run format",
-        "prepare": "husky install",
+        "postinstall": "husky install",
         "test": "jest",
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage"
