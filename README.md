@@ -7,6 +7,11 @@
 
 ![workflow](https://github.com/SvelteWebFonts/google/actions/workflows/node.js.yml/badge.svg)
 
+## The better alternatives :*(
+
+- [Fountsource](https://fontsource.org/) reduces all the abstractions of this library to a single import statement
+- When using [UnoCSS](https://github.com/antfu/unocss) you can use [@unocss/preset-web-fonts](https://github.com/antfu/unocss/tree/main/packages/preset-web-fonts)
+
 ## Installation
 
 ```bash
